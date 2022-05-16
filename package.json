@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/witek2710/realCinema/issues"
   },
-  "homepage": "https://github.com/witek2710/realCinema#readme"
+  "homepage": "https://github.com/witek2710/realCinema#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.3.3",
+    "mongoose-findorcreate": "^3.0.0",
+    "passport": "^0.5.3",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local-mongoose": "^7.0.0"
+  }
 }

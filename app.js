@@ -8,11 +8,12 @@ const config = require('./Config/Database');
 const session = require('express-session');
 const cors = require('cors');
 const GoogleSrategy = require('passport-google-oauth20').Strategy;
-
+const passportLocalMongoose = require('passport-local-mongoose');
+const findOrCreate = require('mongoose-findorcreate');
 
 // database connection
 mongoose.connect(config.database);
-mongoose.set("useCreateIndex", true);
+// mongoose.set("useCreateIndex", true);
 mongoose.connection.on('connected', () => {
     console.log("Connected to database successfully");
 });
@@ -58,7 +59,7 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.plugin(passportLocalMongoose);
-User.plugin(findOrCreate);
+UserSchema.plugin(findOrCreate);
 
 const User = new mongoose.model("User", UserSchema);
 
