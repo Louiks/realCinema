@@ -50,7 +50,9 @@ export class HeaderComponent implements OnInit {
   goToLoginPage(): void {
     this.router.navigate([`../login`]);
   }
-
+  goToRegistrationPage(): void {
+    this.router.navigate([`../register`]);
+  }
   goToDashboard(): void {
     this.router.navigate([``]);
   }

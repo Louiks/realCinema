@@ -1,0 +1,57 @@
+<div class="background">
+    <app-header [displayButtons]="displayButtons"></app-header>
+    <div class="central-page row">
+      <!-- maybe handle smaller screens in an other way -->
+      <div class="left-side col-6">
+        <div class="inner-row">
+          <h1 class="headers">
+            Register
+          </h1>
+          <div>
+            Provide some data of yours and press register!
+          </div>
+        </div>
+        <div>
+          <h2 class="headers">
+            Already have an account?
+          </h2>
+          <div>
+            <a href="/login"> Press HERE to log in. </a>
+          </div>
+        </div>
+      </div>
+      <div class="right-side col-6">
+        <form (ngSubmit)="tryRegister()"
+          [formGroup]="registrationForm"
+          #formGroupDirective="ngForm">
+          <div>
+            <label for="login">Email: </label>
+            <input id="name" type="text" formControlName="email" value={{email}}>
+          </div>
+          <div>
+            <label for="login">Login: </label>
+            <input id="name" type="text" formControlName="username" value={{username}}>
+          </div>
+          <div>
+            <label for="password">Password: </label>
+            <input id="password" type="password" formControlName="password" value={{password}}>
+          </div>
+          <div>
+            <label for="password_repeat">Repeat password: </label>
+            <input id="password_repeat" type="password" formControlName="password_repeat" value={{password_repeat}}>
+          </div>
+          <div>
+            <button [disabled]="isRegisterButtonDisabled()" type="submit" class="btn btn-outline-light">Sign up!</button>
+          </div>
+        </form>
+        <div class="breaker">OR</div>
+        <div class="breaker" id="gSignInWrapper">
+          <span class="label">Register using:</span>
+          <div id="customBtn" class="customGPlusSignIn" (click)="register()">
+            <span class="icon"></span>
+            <span class="buttonText">Google</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

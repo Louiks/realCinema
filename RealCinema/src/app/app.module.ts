@@ -17,6 +17,9 @@ import { LoginOverviewComponent } from './authentication/login/login-overview/lo
 import { MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
 import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthenticationService } from './shared/Authentication/authentication.service';
+import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
+import { RegistrationOverviewComponent } from './authentication/registration/registration-overview/registration-overview.component';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   const isLocal = true;
@@ -48,7 +51,8 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     CinemaRepertoireComponent,
     CinemaRepertoireCardComponent,
     FooterComponent,
-    LoginOverviewComponent
+    LoginOverviewComponent,
+    RegistrationOverviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,14 +61,17 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     NgImageSliderModule,
     MsalModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory
     },
-    MsalService
+    MsalService,
+    AuthenticationService,
+    HttpClient,
   ],
   bootstrap: [AppComponent]
 })

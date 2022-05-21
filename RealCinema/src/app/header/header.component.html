@@ -6,7 +6,7 @@
         <div *ngIf="displayButtons">
             <div class="buttons" *ngIf="!loggedIn">
                 <button type="button" class="btn btn-outline-light log-option" (click)="goToLoginPage()">Log in</button>
-                <button type="button" class="btn btn-outline-light log-option">Register</button>
+                <button type="button" class="btn btn-outline-light log-option" (click)="goToRegistrationPage()">Register</button>
             </div>
             <div class="welcome-sign" *ngIf="loggedIn">
                 <p class="welcome-text d-inline-block">

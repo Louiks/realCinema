@@ -45,22 +45,66 @@
       /* Use the Roboto font that is loaded in the <head> */
       font-family: 'Roboto', sans-serif;
     }
-  
+  // TODO [KOKOT] Handle < 750 px
     .central-page {
       margin-top: 8rem;
       margin-bottom: auto;
-      background-image: linear-gradient(black, rgb(39, 39, 39));
+      background-image: linear-gradient(rgb(22, 22, 22), rgb(34, 34, 34));
       box-shadow: 0px 0px 3px 0px #ffffff;
       border: 3px;
       max-width: 1000px;
-      min-height: 800px;
+      min-height: 65%;
       margin-left: auto;
       margin-right: auto;
+      a {
+        margin-right: 2rem;
+        color: rgb(197, 197, 197);
+      }
+      .inner-row {
+        min-height: 50%;
+      }
+      .headers {
+        color: rgb(197, 197, 197);
+      }
       .left-side {
         box-shadow: 0px 0px 3px 0px #505050;
       }
       .right-side {
         box-shadow: 0px 0px 3px 0px #505050;
+        form {
+          padding-left: auto;
+          padding-right: auto;
+          padding-top: 30%;
+          align-content: center;
+          div {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            label {
+              min-width: 109px;
+              padding-right: 2rem;
+              text-align: right;
+            }
+            a {
+              font-size: smaller;
+            }
+          }
+          .button-row {
+            justify-content: right;
+            margin-right: 4.8rem;
+          }
+        }
+        .breaker {
+          text-align: center;
+          margin-bottom: 4rem;
+          display: flex;
+          justify-content: space-around;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-content: stretch;
+          align-items: center;
+        }
       }
     }
   
