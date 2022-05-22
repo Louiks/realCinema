@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationService } from 'src/app/shared/Navigation/navigation.service';
-import { SsoDataService } from '../../sso-data.service';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationService } from 'src/app/shared/Authentication/authentication.service';
 
@@ -12,6 +11,8 @@ import { AuthenticationService } from 'src/app/shared/Authentication/authenticat
 export class RegistrationOverviewComponent implements OnInit {
   @ViewChild('formGroupDirective')
   registrationFormDirective: FormGroupDirective | undefined;
+  firstName = "Jakub";
+  lastName = "Kokot";
   email = 'Kuba@wp.pl';
   username = 'Kuba';
   password = '123';
@@ -19,8 +20,10 @@ export class RegistrationOverviewComponent implements OnInit {
 
   readonly registrationForm: FormGroup;
   public displayButtons = false;
-  constructor(private ssoDataService: SsoDataService, private navigation: NavigationService, private testService: AuthenticationService) { 
+  constructor( private navigation: NavigationService, private authenticationService: AuthenticationService) { 
     this.registrationForm = new FormGroup({
+      firstName: new FormControl(this.firstName),
+      lastName: new FormControl(this.lastName),
       email: new FormControl(this.email),
       username: new FormControl(this.username),
       password: new FormControl(this.password),
@@ -31,26 +34,36 @@ export class RegistrationOverviewComponent implements OnInit {
   
   ngOnInit(): void {
     this.redirectIfRegistered();
-    this.ssoDataService.setActiveAccountAfterRedirect();  
+    this.authenticationService.setActiveAccountAfterRedirect();  
   }
 
   register () {
-    this.ssoDataService.loginRedirect();
+    this.authenticationService.loginRedirect();
   }
 
   redirectIfRegistered() {
-    this.ssoDataService.getAccountInfo().subscribe(sta =>{
+    this.authenticationService.getAccountInfo().subscribe(sta =>{
       if(!!sta)
         this.navigation.back();
     });
   }
 
-  tryRegister() {
+  tryRegister() {//TODO [KOKOT] Add validation to controls
     if ( this.registrationForm.value.password === this.registrationForm.value.password_repeat )
-      return this.testService.register(this.registrationForm.value.email, this.registrationForm.value.username, this.registrationForm.value.password).subscribe(user =>{
-        this.ssoDataService.updateAccountInfo(user);
-        console.log('should redirect here :)');
+      return this.authenticationService.register(this.registrationForm.value.firstName, this.registrationForm.value.lastName, this.registrationForm.value.email, 
+        this.registrationForm.value.username, this.registrationForm.value.password).subscribe(() =>{
+          this.authenticationService.login(this.registrationForm.value.email, this.registrationForm.value.password).subscribe(user =>{
+            this.authenticationService.updateAccountInfo(
+              {
+                email: user.email,
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName,
+              }
+            );
+          });
       });
+      this.navigation.back();
       return; // TODO [KOKOT] handle 
   }
 

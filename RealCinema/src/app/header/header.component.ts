@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountInfo } from '@azure/msal-browser';
-import { SsoDataService } from '../authentication/sso-data.service';
+import { AuthenticationService } from '../shared/Authentication/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +9,7 @@ import { SsoDataService } from '../authentication/sso-data.service';
 })
 export class HeaderComponent implements OnInit {
   
-  constructor(private ssoDataService: SsoDataService,
+  constructor(private authenticationService: AuthenticationService,
     protected readonly router: Router) {
     
   }
@@ -22,51 +21,34 @@ export class HeaderComponent implements OnInit {
   displayButtons = true;
 
   keepLoggedInStatusUpdated(): void {
-    this.ssoDataService.getAccountInfo().subscribe(accountInfo =>{
-      if(!!accountInfo) {
-        this.loggedIn = true;
-        let account = {
-          homeAccountId: accountInfo.homeAccountId,
-          environment: accountInfo.environment,
-          tenantId: accountInfo.tenantId,
-          username: accountInfo.username,
-          localAccountId: accountInfo.localAccountId,
-          name: accountInfo.name,
-          idTokenClaims: accountInfo.idTokenClaims,
-        }
-        localStorage.setItem('activeAcc', JSON.stringify(account));
-      }else {
-        this.loggedIn = false;
-        localStorage.removeItem('activeAcc');
-      }
+    AuthenticationService.accountInfo.subscribe(accountInfo =>{
+      console.log(accountInfo);
+      this.loggedIn = !!accountInfo;
     });
   }
 
   ngOnInit(): void {
-    this.ssoDataService.setActiveAccountAfterRedirect();
+    this.authenticationService.setActiveAccountAfterRedirect();
     this.keepLoggedInStatusUpdated();
   }
 
   goToLoginPage(): void {
     this.router.navigate([`../login`]);
   }
+
   goToRegistrationPage(): void {
     this.router.navigate([`../register`]);
   }
+  
   goToDashboard(): void {
     this.router.navigate([``]);
   }
 
   getUsername(): string {
-    if(this.loggedIn) {
-      let JSONAccount = localStorage.getItem('activeAcc');
-      let account = JSONAccount ? JSON.parse(JSONAccount) : undefined;
-      return  account.name ?? account.username;
-    }
-    return 'User';
+    return this.authenticationService.getUsername();
   }
 
   logOut(): void {
-    this.ssoDataService.logout();
+    this.authenticationService.logout();
   }
 }
