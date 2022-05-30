@@ -1,0 +1,101 @@
+.background {
+    background-image: linear-gradient(rgb(39, 39, 39), black);
+    position:fixed;
+    padding:0;
+    margin:0;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    color: #888;
+    font-size: large;
+  
+    #customBtn {
+        display: inline-block;
+        background: white;
+        color: #444;
+        width: 190px;
+        border-radius: 5px;
+        border: thin solid #888;
+        box-shadow: 1px 1px 1px grey;
+        white-space: nowrap;
+      }
+      #customBtn:hover {
+        cursor: pointer;
+      }
+      span.label {
+        font-family: serif;
+        font-weight: normal;
+      }
+      span.icon {
+        background: url('../../../../assets/Icons/download.png') transparent 5px 50% no-repeat;
+        background-size: 30px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 42px;
+        height: 42px;
+      }
+      span.buttonText {
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 42px;
+        padding-right: 42px;
+        font-size: 14px;
+        font-weight: bold;
+        /* Use the Roboto font that is loaded in the <head> */
+        font-family: 'Roboto', sans-serif;
+      }
+    
+      .central-page {
+        margin-top: 8rem;
+        margin-bottom: auto;
+        background-image: linear-gradient(rgb(22, 22, 22), rgb(34, 34, 34));
+        box-shadow: 0px 0px 3px 0px #ffffff;
+        border: 3px;
+        max-width: 1000px;
+        min-height: 65%;
+        margin-left: auto;
+        margin-right: auto;
+        a {
+          margin-right: 2rem;
+          color: rgb(197, 197, 197);
+        }
+        .headers {
+          color: rgb(197, 197, 197);
+        }
+        .left-side {
+          box-shadow: 0px 0px 3px 0px #505050;
+          .inner-row {
+            min-height: 50%;
+          }
+        }
+        .right-side {
+          box-shadow: 0px 0px 3px 0px #505050;
+          form {
+            margin-top: 10%;
+            align-content: center;
+            div {
+              display: flex;
+              justify-content: flex-end;
+              margin-right: 2rem;
+              margin-bottom: 1.5rem;
+              label {
+                margin-right: 3rem;
+              }
+            }
+          }
+          .breaker {
+            text-align: center;
+            margin-bottom: 4rem;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-content: stretch;
+            align-items: center;
+          }
+        }
+      }
+    
+  }
+  
