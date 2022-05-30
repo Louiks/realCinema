@@ -53,14 +53,10 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     CinemaRepertoireComponent,
     CinemaRepertoireCardComponent,
     FooterComponent,
-<<<<<<< HEAD:Frontend/src/app/app.module.ts
     LoginOverviewComponent,
     RegistrationOverviewComponent,
     NewHallOverviewComponent,
     AdminPanelComponent,
-=======
-    LoginOverviewComponent
->>>>>>> 5bdcd0f62d72e6a90a876fd304798d820b0889c5:RealCinema/src/app/app.module.ts
   ],
   imports: [
     BrowserModule,
@@ -69,14 +65,17 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     NgImageSliderModule,
     MsalModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory
     },
-    MsalService
+    MsalService,
+    AuthenticationService,
+    HttpClient,
   ],
   bootstrap: [AppComponent]
 })
