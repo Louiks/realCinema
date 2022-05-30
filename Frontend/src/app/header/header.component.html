@@ -1,0 +1,25 @@
+<section>
+    <div class="header-container">
+        <div class="logo-design" (click)="goToDashboard()">
+            RealCinema
+        </div>
+        <div *ngIf="displayButtons">
+            <div class="buttons" *ngIf="!loggedIn">
+                <button type="button" class="btn btn-outline-light log-option" (click)="goToLoginPage()">Log in</button>
+                <button type="button" class="btn btn-outline-light log-option" (click)="goToRegistrationPage()">Register</button>
+            </div>
+            <div class="welcome-sign" *ngIf="loggedIn">
+                <p class="welcome-text d-inline-block">
+                    Welcome,
+                </p>
+                <div ngbDropdown class="d-inline-block">
+                    <button type="button" class="btn btn-outline-secondary name" id="dropdownBasic2" ngbDropdownToggle>{{getUsername()}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                        <button ngbDropdownItem>User Settings</button>
+                        <button ngbDropdownItem (click)="logOut()">Log out</button>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</section>
