@@ -65,17 +65,14 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     NgImageSliderModule,
     MsalModule,
     ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
+    FormsModule
   ],
   providers: [
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory
     },
-    MsalService,
-    AuthenticationService,
-    HttpClient,
+    MsalService
   ],
   bootstrap: [AppComponent]
 })
