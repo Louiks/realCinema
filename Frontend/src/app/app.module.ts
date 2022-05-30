@@ -20,6 +20,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationService } from './shared/Authentication/authentication.service';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { RegistrationOverviewComponent } from './authentication/registration/registration-overview/registration-overview.component';
+import { NewHallOverviewComponent } from './admin/newHall/new-hall-overview/new-hall-overview.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   const isLocal = true;
@@ -53,6 +55,8 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     FooterComponent,
     LoginOverviewComponent,
     RegistrationOverviewComponent,
+    NewHallOverviewComponent,
+    AdminPanelComponent,
   ],
   imports: [
     BrowserModule,
