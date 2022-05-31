@@ -8,7 +8,67 @@ const configDatabase = require('./config/database');
 const { init } = require('express/lib/application');
 const res = require('express/lib/response');
 const Role = database.role;
+const passport = require("passport");
+const User = database.user;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const session = require('express-session');
 
+
+var corsOptions = {
+  origin: "http://localhost:4200"
+};
+
+app.use(cors(corsOptions));
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.use(session({
+secret: process.env.COOKKIE_SECRET,
+resave: false,
+saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// sso
+passport.use(User.createStrategy());
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/google/secrets",
+  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+},
+function(accessToken, refreshToken, profile, cb) {
+  console.log(profile);
+
+  User.findOrCreate({ googleID: profile.id }, function (err, user) {
+  return cb(null, user);
+  });
+}
+));
+
+app.get("/auth/google",
+  passport.authenticate('google', { scope: ["profile"] })
+);
+
+app.get("/auth/google/secrets",
+  passport.authenticate('google'),
+  function(req, res) {
+    // Successful authentication, redirect to secrets.
+    res.send("Successful authentication!");
+  });
 
 database.mongoose.connect(configDatabase.database, {
     useNewUrlParser: true,
@@ -46,21 +106,6 @@ function initDatabase() {
     });
   };
 
-var corsOptions = {
-    origin: "http://localhost:4200"
-};
-
-app.use(cors(corsOptions));
-
-
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-
-app.use(cookieSession({
-    name: "session",
-    secret: process.env.COOKKIE_SECRET,
-    httpOnly: true
-}));
 
 require('./routes/authRoute')(app);
 
@@ -83,8 +128,6 @@ const SeatSchema = new database.mongoose.Schema({
 
 const Seat = new database.mongoose.model("Seat", SeatSchema);
 
-
-/////////// Seats ////////////////////////////////
 
 app.route("/seats")
 
@@ -187,36 +230,6 @@ app.route("/seats/:seatsRowColumn")
     }
   });
 });
-
-// reservation
-
-const ReservationSchema = new database.mongoose.Schema({
-  username: {
-      type: String,
-      required: true
-  },
-  seats: [{
-      type: database.mongoose.Schema.Types.Mixed, ref: 'Seat',
-      required: true
-  }],
-  movie: {
-      type: database.mongoose.Schema.Types.Mixed, ref: 'Movie',
-      required: true
-  },
-
-  hall: {
-      type: database.mongoose.Schema.Types.Mixed, ref: 'Hall',
-      required: true
-  },
-
-  date: {
-      type: Date,
-      required: true
-  },
-
-});
-
-const Reservation = new database.mongoose.model("Reservation", ReservationSchema);
 
 
 // movies
@@ -478,8 +491,81 @@ const TicketSchema = new database.mongoose.Schema({
   },
 });
 
-
 const Ticket = new database.mongoose.model('Ticket', TicketSchema);
+
+// reservation
+
+const ReservationSchema = new database.mongoose.Schema({
+  firstName: {
+      type: String,
+      required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+},  email: {
+  type: String,
+  required: true
+},
+  seats: [{
+      type: database.mongoose.Schema.Types.Mixed, ref: 'Seat',
+      required: true
+  }],
+  movie: {
+      type: database.mongoose.Schema.Types.Mixed, ref: 'Movie',
+      required: true
+  },
+  date: {
+      type: Date,
+      required: false
+  },
+
+});
+
+const Reservation = new database.mongoose.model("Reservation", ReservationSchema);
+
+addReservation =  function (newReservation, callback) {
+  newReservation.save(callback)
+};
+
+
+
+/////////// Seats ////////////////////////////////
+
+app.use('/reserve', (req, res) => {
+
+  Seat.reserveSeat({ seats: req.body.seats }, (err, done) => {
+      if (err) {
+          res.json({
+              msg: "Failed to reserve seats " + err,
+              success: false,
+          });
+      } else {
+          let reservation = new Reservation({
+              firstName: req.body.personInfo.firstName,
+              lastName: req.body.personInfo.lastName,
+              email: req.body.personInfo.email,
+              seats: req.body.seats,
+              movie: req.body.movie
+          })
+          Reservation.addReservation(reservation, (err2, reserv) => {
+              if (err) {
+                  res.json({
+                      msg: "Failed to reserve seats " + err2,
+                      success: false,
+                  });
+              } else {
+                  res.json({
+                      msg: "Reservation has done: ",
+                      success: true,
+                      reservation: reserv,
+                      updatedSeats: done
+                  });
+              }
+          })
+      }
+  });
+});
 
 app.listen(3000, () => {
     console.log("Server started on port 3000.");
