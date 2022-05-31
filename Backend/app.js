@@ -5,8 +5,7 @@ const cors = require('cors');
 const app = express();
 const database = require('./models');
 const configDatabase = require('./config/database');
-const { init } = require('express/lib/application');
-const res = require('express/lib/response');
+
 const Role = database.role;
 const passport = require("passport");
 const User = database.user;
@@ -53,7 +52,8 @@ passport.use(new GoogleStrategy({
 function(accessToken, refreshToken, profile, cb) {
   console.log(profile);
 
-  User.findOrCreate({ googleID: profile.id }, function (err, user) {
+  User.findOrCreate({ firstName: profile.name.givenName,
+    lastName: profile.name.familyName, googleID: profile.id }, function (err, user) {
   return cb(null, user);
   });
 }
@@ -70,7 +70,7 @@ app.get("/auth/google/secrets",
     res.send("Successful authentication!");
   });
 
-database.mongoose.connect(configDatabase.database, {
+database.mongoose.connect('mongodb://localhost:27017/realCinema22', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -111,7 +111,7 @@ require('./routes/authRoute')(app);
 
 // seats 
 
-const SeatSchema = new database.mongoose.Schema({
+const SeatSchema = database.mongoose.Schema({
   row: {
       type: String,
       required: true
@@ -126,7 +126,7 @@ const SeatSchema = new database.mongoose.Schema({
   },
 });
 
-const Seat = new database.mongoose.model("Seat", SeatSchema);
+const Seat = database.mongoose.model("Seat", SeatSchema);
 
 
 app.route("/seats")
@@ -234,7 +234,7 @@ app.route("/seats/:seatsRowColumn")
 
 // movies
 
-const MovieSchema = new database.mongoose.Schema({
+const MovieSchema = database.mongoose.Schema({
   name: {
       type: String,
       required: true,
@@ -248,7 +248,7 @@ const MovieSchema = new database.mongoose.Schema({
   },
 });
 
-const Movie = new database.mongoose.model("Movie", MovieSchema);
+const Movie = database.mongoose.model("Movie", MovieSchema);
 
 app.route("/movies")
 
@@ -351,7 +351,7 @@ app.route("/movies/:movieName")
 
 // hall
 
-const HallSchema = new database.mongoose.Schema({
+const HallSchema = database.mongoose.Schema({
   NumberOfHall: {
       type: Number,
       required: true,
@@ -367,7 +367,7 @@ const HallSchema = new database.mongoose.Schema({
   },
 });
 
-const Hall = new database.mongoose.model("Hall", HallSchema);
+const Hall = database.mongoose.model("Hall", HallSchema);
 
 
 app.route("/halls")
@@ -470,7 +470,7 @@ app.route("/halls/:hallnumber")
 
 // ticket
 
-const TicketSchema = new database.mongoose.Schema({
+const TicketSchema = database.mongoose.Schema({
   datesOfFilm: {
       type: [Date],
       required: true
@@ -491,11 +491,11 @@ const TicketSchema = new database.mongoose.Schema({
   },
 });
 
-const Ticket = new database.mongoose.model('Ticket', TicketSchema);
+const Ticket = database.mongoose.model('Ticket', TicketSchema);
 
 // reservation
 
-const ReservationSchema = new database.mongoose.Schema({
+const ReservationSchema = database.mongoose.Schema({
   firstName: {
       type: String,
       required: true
@@ -522,7 +522,7 @@ const ReservationSchema = new database.mongoose.Schema({
 
 });
 
-const Reservation = new database.mongoose.model("Reservation", ReservationSchema);
+const Reservation = database.mongoose.model("Reservation", ReservationSchema);
 
 addReservation =  function (newReservation, callback) {
   newReservation.save(callback)
