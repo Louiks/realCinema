@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { reduce } from 'rxjs';
+import { fromEvent, Observable, reduce, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-new-hall-overview',
@@ -14,6 +14,8 @@ export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
   seatRows: boolean[][] | undefined;
   isOverflown = false;
   alphabet: string | undefined;
+  resizeObservable$: Observable<Event> | undefined
+  resizeSubscription$: Subscription | undefined
   
 
   constructor() { }
@@ -28,13 +30,19 @@ export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
       [true,true,false,false,false,true,false,true,false,true,true,true,false,true,true,true,false],
       [true,false,true,false,false,true,false,true,false,true,false,true,false,true,false,true,false],
       [true,false,false,true,false,true,true,true,false,true,true,true,false,true,false,true,false]];
-      
+  
     this.seatRowsCopy = JSON.parse(JSON.stringify(this.seatRows));
     this.numberArray = Array(100).fill(0).map((x,i)=>i);
 
     this.selectedRows = 5;
     this.selectedSeats = 17;
     this.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    this.resizeObservable$ = fromEvent(window, 'resize')
+    this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
+      console.log('event: ', evt)
+      this.updateOverflow();
+    })
   }
 
   getEquivalent(i: number, j: number): boolean {
