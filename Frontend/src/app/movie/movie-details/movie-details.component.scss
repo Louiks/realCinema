@@ -1,0 +1,32 @@
+section {
+    background-image: linear-gradient(rgb(39, 39, 39), black);
+    width: 100%;
+    overflow: hidden;
+    
+    .picture-background {
+        background: linear-gradient(to bottom right, rgba(0, 0, 0, 0) 1%,
+        rgb(0, 0, 0)), url('../../../assets/6.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .right-panel {
+        background: linear-gradient(to top left, rgba(0, 0, 0, 0) 1%,rgb(0, 0, 0));
+        border-radius: 4rem 0rem 0rem 0rem;
+        margin-top: 4rem;
+    }
+    .test {
+        padding-top: 1rem;
+        padding-bottom: 5rem;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1280px;
+    }
+    .label {
+        font-size: large;
+        text-shadow: #FFF 0px 0px 5px;
+        padding-right: 1rem;
+    }
+}

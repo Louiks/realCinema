@@ -5,6 +5,7 @@ import { NewHallOverviewComponent } from './admin/newHall/new-hall-overview/new-
 import { LoginOverviewComponent } from './authentication/login/login-overview/login-overview.component';
 import { RegistrationOverviewComponent } from './authentication/registration/registration-overview/registration-overview.component';
 import { DashboardOverviewComponent } from './dashboard/dashboard-overview/dashboard-overview.component';
+import { MovieDetailsComponent } from './movie/movie-details/movie-details.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: 'newhall',
     component: NewHallOverviewComponent
+    },
+  {
+    path: 'movie',
+    component: MovieDetailsComponent
     },
 ];
 

@@ -22,6 +22,10 @@ import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http'
 import { RegistrationOverviewComponent } from './authentication/registration/registration-overview/registration-overview.component';
 import { NewHallOverviewComponent } from './admin/newHall/new-hall-overview/new-hall-overview.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { MovieDetailsComponent } from './movie/movie-details/movie-details.component';
+import { DescriptionComponent } from './movie/description/description.component';
+import { TimeCardComponent } from './movie/time-card/time-card.component';
+import { SeatSelectionComponent } from './movie/seat-selection/seat-selection.component';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   const isLocal = true;
@@ -57,6 +61,10 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     RegistrationOverviewComponent,
     NewHallOverviewComponent,
     AdminPanelComponent,
+    MovieDetailsComponent,
+    DescriptionComponent,
+    TimeCardComponent,
+    SeatSelectionComponent,
   ],
   imports: [
     BrowserModule,

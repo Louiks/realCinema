@@ -1,0 +1,21 @@
+@import "src/app/shared/style.scss";
+
+.tile {
+    margin: 2rem;
+    width: 100px;
+    height: 100px;
+    border:1px solid white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tile:hover {
+    background-color: rgb(43, 43, 43);
+    cursor: pointer;
+    @include rc-common-text;
+}
+.content {
+    font-size: x-large;
+    text-align: center;
+}

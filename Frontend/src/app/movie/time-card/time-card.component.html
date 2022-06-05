@@ -1,0 +1,7 @@
+<div *ngIf="time || other" class="tile">
+    <div class="content">
+        {{time}}
+        <div *ngIf="!time && other">{{other}}</div>
+    </div>
+
+</div>
