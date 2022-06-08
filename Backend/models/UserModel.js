@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     firstname: {type: String},
     lastname: {type: String},
     password: {type: String},
+    phoneNumber: {type: Number},
     roles: [
         {
             type: mongoose.Schema.Types.ObjectId,
