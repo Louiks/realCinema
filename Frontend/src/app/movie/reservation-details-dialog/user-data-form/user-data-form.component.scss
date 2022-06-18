@@ -1,0 +1,88 @@
+@import "src/app/shared/style.scss";
+
+section {
+    display: flex;
+    justify-content: center;
+    color: white;
+    min-height: 800px;
+    background-image: linear-gradient(rgb(39, 39, 39), black);
+}
+.centered-card {
+    padding: 4rem;
+    width: 60%;
+    min-height: 400px;
+    background-image: linear-gradient(to bottom,rgb(39, 39, 39), rgb(68, 68, 68), black);
+}
+.expiration-date {
+    display: inline-block;
+    color: black;
+    font-weight: bold;
+}
+.short-action-description{
+    display: inline-block;
+    font-size: large;
+}
+
+.submit__btn {
+    color: white;
+    background: none;
+    padding: 0.5rem;
+    border-radius: 3px ;
+    border: 1px solid white;
+    min-width: 150px;
+}
+.submit__btn:hover {
+    background-color: rgb(58, 58, 58);
+    @include rc-common-text;
+}
+.submit__btn:active {
+    transform: translateY(4px);
+}
+.submit__btn:disabled {
+    background: #dddddd;
+    color: gray;
+}
+.submit__btn:disabled:hover {
+    color: grey;
+    text-shadow: none;
+}
+
+.button-container {
+    margin-top: 2rem;
+    max-width: 80%;
+    display: flex;
+    justify-content: right;
+}
+
+.button-container-done {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+.form-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.label-and-control {
+    display: flex;
+    justify-content: center;
+    margin: 1rem;
+}
+
+.form {
+    margin-top: 2rem;
+}
+
+label {
+    margin-right: 1rem;
+}
+
+.waiting {
+    cursor: wait;
+}
+
+.reservation-done-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}

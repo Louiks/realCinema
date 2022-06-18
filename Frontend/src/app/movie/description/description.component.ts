@@ -22,6 +22,8 @@ export class DescriptionComponent implements OnInit {
   times?: Date[] | string[];
   formattedTimes: any;
   moreInfo = 'More...';
+  private openedModal?: any;
+
   constructor(private movieService: MovieService, private modalService: NgbModal) { }
 
   
@@ -62,14 +64,8 @@ export class DescriptionComponent implements OnInit {
   }
 
   open(content: any) {
-    this.modalService.open(content,
-   {ariaLabelledBy: 'modal-basic-title', size: 'lg', centered: true, windowClass: 'popup-custom'}).result.then(
-     (result) => {
-      console.log(`Closed with: ${result}`);
-
-    }, (reason) => {
-      console.log(`Dismissed ${this.getDismissReason(reason)}`);
-    });
+    this.openedModal = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg', centered: true, windowClass: 'popup-custom'});
+    this.openedModal.componentInstance.modal = this.openedModal;
   }
   
   private getDismissReason(reason: any): string {

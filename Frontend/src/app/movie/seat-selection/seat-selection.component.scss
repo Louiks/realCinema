@@ -1,5 +1,9 @@
 @import "src/app/shared/style.scss";
 
+.waiting {
+    cursor: wait !important;
+}
+
 .content{
     padding: 2rem;
     background-image: linear-gradient(rgb(39, 39, 39), black);
@@ -137,6 +141,15 @@
 .reserve__btn:active {
     transform: translateY(4px);
 }
+.reserve__btn:disabled {
+    background: #dddddd;
+    color: gray;
+}
+.reserve__btn:disabled:hover {
+    color: grey;
+    text-shadow: none;
+}
+
 .button-container {
     display: flex;
     justify-content: flex-end;
@@ -154,4 +167,8 @@
 
 .title {
     font-size: x-large;
+}
+
+.waiting {
+    cursor: wait;
 }

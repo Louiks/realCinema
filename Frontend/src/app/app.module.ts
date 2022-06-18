@@ -26,6 +26,7 @@ import { MovieDetailsComponent } from './movie/movie-details/movie-details.compo
 import { DescriptionComponent } from './movie/description/description.component';
 import { TimeCardComponent } from './movie/time-card/time-card.component';
 import { SeatSelectionComponent } from './movie/seat-selection/seat-selection.component';
+import { UserDataFormComponent } from './movie/reservation-details-dialog/user-data-form/user-data-form.component';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   const isLocal = true;
@@ -65,6 +66,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     DescriptionComponent,
     TimeCardComponent,
     SeatSelectionComponent,
+    UserDataFormComponent,
   ],
   imports: [
     BrowserModule,

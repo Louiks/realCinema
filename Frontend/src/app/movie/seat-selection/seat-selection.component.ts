@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { fromEvent } from 'rxjs';
 import { MovieService } from '../movie.service';
 
@@ -14,6 +15,10 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   @Input()
   movie = '';
 
+  @Input()
+  public modal: any;
+
+  buttonContent?: string = 'Reserve';
   seatRows?: boolean[][];
   seatRowsCopy: any;
   numberArray?: number[];
@@ -31,8 +36,11 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   formattedSelectedCount = '';
   movieObject: any;
   formattedSeatPrice: string | undefined;
-
-  constructor(private movieService: MovieService) { }
+  isWaiting = false;
+  private element: any;
+  constructor(private movieService: MovieService, protected readonly router: Router, private el: ElementRef) { 
+    this.element = el.nativeElement;
+  }
 
   ngAfterViewInit(): void {
     this.updateOverflow();
@@ -60,12 +68,15 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   
   switch(event: any): void {
     let buttonId = event.target.attributes.id;
-    let nums = buttonId.value.toString().split("_");
-    this.seatRowsCopy[nums[1]][nums[2]]? this.selected++ : this.selected--;
-    this.price = this.selected * 19.50;
-    this.formattedPrice = `Total: ` + this.price + `zł`;
-    this.formattedSelectedCount = `Selected seats: ` + this.selected;
-    this.seatRowsCopy[nums[1]][nums[2]] = !this.seatRowsCopy[nums[1]][nums[2]]
+    if (buttonId){
+
+      let nums = buttonId.value.toString().split("_");
+      this.seatRowsCopy[nums[1]][nums[2]]? this.selected++ : this.selected--;
+      this.price = this.selected * 19.50;
+      this.formattedPrice = `Total: ` + this.price + `zł`;
+      this.formattedSelectedCount = `Selected seats: ` + this.selected;
+      this.seatRowsCopy[nums[1]][nums[2]] = !this.seatRowsCopy[nums[1]][nums[2]]
+    }
   }
   
   getEquivalent(i: number, j: number): boolean {
@@ -81,7 +92,27 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
     return !this.disabledSeats[i][j];
   }
 
+  isReserveButtonDisabled(): boolean {
+    return this.selected === 0 || this.isWaiting;
+  }
+
   submit(): void {
-    
+    this.isWaiting = true;
+    setTimeout(() => {
+      this.modal.close();
+      this.router.navigate([`../reservation-form`]);//TODO Outcomment
+    }, 3000);
+    // this.movieService.reserveSeats(this.seatRowsCopy).subscribe((response)=>{
+    //   console.log(response);
+    //   if (true) {
+    //     //if response ok
+    //     this.router.navigate([`../reservation-form`]);
+    //   }
+    //   /*
+    //   tutaj jako response mozna dostac
+    //   - ok, wtedy zamyka się popup, przechodzimy do podania danych i rezerwacja jest tymczasowa, np. mamy 10 minut na podanie swoich danych
+    //   - nie ok, wtedy w response dostajemy informację o tych miejscach ktore zostaly juz zarezerwowane
+    //   */
+    // });
   }
 }

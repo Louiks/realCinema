@@ -8,6 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class CinemaRepertoireCardComponent implements OnInit {
 
   @Input()
+  href?: string = 'http://localhost:4200/movie';
+
+  @Input()
   imgSrc?: string = '../../../../assets/slider/1.jpg';
   
   @Input()

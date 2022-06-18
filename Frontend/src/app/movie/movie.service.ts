@@ -1,11 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
+const baseUrl = 'http://localhost:4200/movie';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
 
-  constructor() { }
+
+  constructor(private http: HttpClient) { }
 
   index = 0;
 
@@ -92,5 +96,13 @@ export class MovieService {
         [true,false,false,true,false,true,true,true,false,true,true,true,false,true,false,true,false]],
       singleSeatPrice: 19.5,
     };
+  }
+
+  reserveSeats(data: any) {
+    return this.http.put(`${baseUrl}/reserve_seats`, data);
+  }
+
+  submitUserData(data: any) {
+    return this.http.put(`${baseUrl}/user_data`, data);
   }
 }

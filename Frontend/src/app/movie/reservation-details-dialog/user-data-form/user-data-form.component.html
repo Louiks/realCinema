@@ -1,0 +1,58 @@
+<app-header></app-header>
+<!-- <app-navbar></app-navbar> -->
+<section [ngClass]="{'waiting' : isWaiting }">
+    <div class="centered-card" *ngIf="!hasBeenSumbitted" >
+        <h1>Temporary reservation set!</h1>
+        <br>
+        <div class="short-action-description">Your reservation will expire at: 
+            <div class="expiration-date">{{formattedExpirationDate}}</div>
+            , unless you <u>submit</u> your data.</div>
+        <form [formGroup]="reservationDataForm" class="form">
+            <div class="form-content">
+                <div class="label-and-control">
+                    <label for="firstName">First name: </label><br>
+                    <input id="firstName" type="text" formControlName="firstName" [ngClass]="{'waiting' : isWaiting }" [disabled]="isWaiting">                
+                </div>
+                <div class="label-and-control">
+                    <label for="lastName">Last name: </label><br>
+                    <input id="lastName" type="text" formControlName="lastName" [ngClass]="{'waiting' : isWaiting }" [disabled]="isWaiting">
+                </div>
+                <div class="label-and-control">
+                    <label for="phoneNo">Phone No: </label><br>
+                    <input id="phoneNo" type="tel" formControlName="phoneNo" [ngClass]="{'waiting' : isWaiting }" [disabled]="isWaiting">                
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="submit__btn" type="submit" [disabled]="submitDisabled() || !reservationDataForm.valid" (click)="submit()" [ngClass]="{'waiting' : isWaiting }">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class="centered-card" *ngIf="hasBeenSumbitted">
+        <div class="reservation-done-title">
+            Reservation has been sumbitted!
+        </div>
+        <div class="formatted-information">
+            <div>
+                <b>Movie:</b> {{movie.title}}
+            </div>
+            <div>
+                <b>Date:</b> {{movie.date}}
+            </div>
+            <div>
+                <b>Hall:</b> {{movie.hall}}
+            </div>
+            <div>
+                <b>Seats:</b> {{movie.seats}}
+            </div>
+            <div>
+                <b>Price:</b> {{movie.price}}
+            </div>
+        </div>
+        <div class="button-container-done">
+            <button class="submit__btn" (click)="goToDashboard()">
+                Dashboard
+            </button>
+        </div>
+    </div>
+</section>
+<app-footer></app-footer>
