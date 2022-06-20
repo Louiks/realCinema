@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 const database = require('./models');
 const configDatabase = require('./config/database');
-
+const io = require('socket.io')(express);
 const Role = database.role;
 const passport = require("passport");
 const User = database.user;
