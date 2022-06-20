@@ -16,7 +16,7 @@ const SeatSchema = mongoose.Schema({
     },
   });
 
-const Seat = module.exports = mongoose.model("Seat", SeatSchema);
+//const Seat = module.exports = mongoose.model("Seat", SeatSchema);
 
 module.exports.reserveSeat = function({seats, person}, callback)
 {

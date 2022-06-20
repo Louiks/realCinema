@@ -5,7 +5,6 @@ const cors = require('cors');
 const app = express();
 const database = require('./models');
 const configDatabase = require('./config/database');
-const io = require('socket.io')(express);
 const Role = database.role;
 const passport = require("passport");
 const User = database.user;
@@ -34,7 +33,7 @@ saveUninitialized: false
 
 
 app.use('/ticket', ticketRoute);
-app.use('/seats', seatsRoute);
+//app.use('/seats', seatsRoute);
 app.use('/reservation', reservationRoute);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -118,53 +117,58 @@ function initDatabase() {
 
 require('./routes/authRoute')(app);
 
-// // seats 
 
-// const SeatSchema = database.mongoose.Schema({
-//   row: {
-//       type: String,
-//       required: true
-//   },
-//   column: {
-//       type: String,
-//       required: true
-//   },
-//   isReserved: {
-//       type: Boolean,
-//       default: false
-//   },
-// });
+// pojedyncze miejsce
+const SeatSchema = database.mongoose.Schema({
+   row: {
+      type: String,
+      required: true
+   },
+   column: {
+       type: String,
+       required: true
+   },
+   isReserved: {
+       type: Boolean,
+       default: false
+   },
+});
 
-// const Seat = database.mongoose.model("Seat", SeatSchema);
+const Seat = database.mongoose.model("Seat", SeatSchema);
 
 
-// app.route("/seats")
+app.route("/seats")
+// pobieramy wszystkie miejsca
+ .get(function(req, res){
+   Seat.find(function(err, seats){
+     if(seats) {
+       const jsonSeats = JSON.stringify(seats);
+       res.send(jsonSeats);
+     }
+     else
+     {
+       res.send("No seats");
+     }
+   });
+ })
 
-// .get(function(req, res){
-//   Seat.find(function(err, seats){
-//     if(seats) {
-//       const jsonSeats = JSON.stringify(seats);
-//       res.send(jsonSeats);
-//     }
-//     else
-//     {
-//       res.send("No seats");
-//     }
-//   });
-// })
-
-// .post(function(req, res){
-//   const newSeat = Seat({
-//     row: req.body.row,
-//     column: req.body.column,
-//     isReserved: false
-//   });
-//   newSeat.save(function(err){
-//     if(!err){
-//       res.send("Successfully added a new seat");
-//     }
-//   });
-// })
+ .post(function(req, res){
+  console.log(req.body);
+  array = [];
+  req.body.forEach(element => {
+    console.log(element);
+    const newSeat = Seat({
+      row: element.row,
+      column: element.column,
+      isReserved: element.isreserved
+    });
+    array.push(newSeat);
+  });
+  Seat.insertMany(array, function(err){
+    if(!err){
+       res.send("Successfully added a new seat");
+     }});
+ })
 
 
 // .delete(function(req, res){
