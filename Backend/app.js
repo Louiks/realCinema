@@ -215,22 +215,43 @@ app.route("/seats")
 //   });
 // })
 
-// .put(function(req, res){
-//   const seatRow = req.params.seatRow;
-//   const seatColumn = req.params.seatColumn;
-//   Seat.update(
-//     {row: seatRow},
-//     {column: seatColumn},
-//     {isReserved: false},
-//     function(err)
-//     {
-//       if(!err){
-//         res.send("Successfully updated selected seat");
-//       } else {
-//         res.send(err);
-//       }
-//     });
-// })
+ .put(function(req, res){
+   array = [];
+   req.body.forEach(element => {
+    console.log(element);
+    const obj = {
+      row: element.row,
+      column: element.column
+    };
+    array.push(obj);
+  });
+  console.log(array);
+  seatsArray = [];
+  array.forEach(element => {
+    Seat.find(
+      {$and:[
+          {"row":{"$in":[element.row]}},
+          {"column":{"$in":[element.column]}}
+      ]}, (err, seats) => {
+        if (err) {
+            res.json({
+                success: false,
+                message: "An error occured while fetching seats",
+            })
+        } else {
+            seatsArray.push(seats);
+            res.json({
+                success: true,
+                message: "Seats fetched",
+                seats: seats
+            })
+        }
+    })
+ });
+ console.log(seatsArray);
+  });
+
+   
 
 // .delete(function(req, res){
 //   const seatRow = req.params.seatRow;
