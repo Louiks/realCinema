@@ -125,11 +125,24 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   submit() {
     this.movie = {...this.movie, date: this.movie.date + this.time, seats: this.selected.toString(), price: this.price + `zł`}
     this.isWaiting = true;
+    
     setTimeout(() => {
       return this.movieService.reserveSeats(this.seatRowsCopy)
         .subscribe(response=>{
-          if(response) {
-            this.modal.close();
+          let shouldReserveCount = 0;
+          this.seatRowsCopy?.forEach((row: any[]) => {
+            row.forEach((seat: any) => {
+              seat === false && shouldReserveCount++;
+            })
+          })
+          let notReservedCount = shouldReserveCount - (response as any)?.message?.modifiedCount;
+          this.modal.close();
+          if(notReservedCount > 0) {
+            this.router.navigate([`../reservation-form`, 
+            {
+              movie_error_c: notReservedCount,
+            }]);
+          }else {
             this.router.navigate([`../reservation-form`, 
             {
               movie_title: this.movie.title,
@@ -138,7 +151,8 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
               movie_hall: this.movie.hall,
               movie_seats: this.movie.seats,
             }]);
-          }}
+          }
+        }
         );
     }, 1000);
   }

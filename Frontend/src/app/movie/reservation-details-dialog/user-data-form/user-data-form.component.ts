@@ -25,7 +25,7 @@ export class UserDataFormComponent implements OnInit {
     hall: '',
     seats: '',
   }
-  reservationFailed = false;
+  movie_error_c = '';
   pipe = new DatePipe('en-US');
   formattedExpirationDate: any;
   hasBeenSumbitted = false;
@@ -65,15 +65,15 @@ export class UserDataFormComponent implements OnInit {
       hall: this.route.snapshot.paramMap.get('movie_hall') ?? '',
       seats: this.route.snapshot.paramMap.get('movie_seats') ?? '',
     }
-    console.log(this.route.snapshot.paramMap.get('movie_title'));
-    console.log(this.route.snapshot.paramMap.get('movie_date'));
-    console.log(this.route.snapshot.paramMap.get('movie_price'));
-    console.log(this.route.snapshot.paramMap.get('movie_hall'));
-    console.log(this.route.snapshot.paramMap.get('movie_seats'));
+    this.movie_error_c = this.route.snapshot.paramMap.get('movie_error_c') ?? this.movie_error_c;
+    this.movie_error_c !== '' && 
+      setTimeout(() => {
+        this.goBackToMovie()
+      }, 2000
+    )
   }
 
   submit() {
-    //todo use goBackToMovie() if response not ok
     this.isWaiting = true;
     setTimeout(()=> {
       this.hasBeenSumbitted = true;
@@ -103,6 +103,6 @@ export class UserDataFormComponent implements OnInit {
   }
 
   shouldWait(): boolean {
-    return this.isWaiting || this.reservationFailed;
+    return this.isWaiting || this.movie_error_c !== '';
   }
 }

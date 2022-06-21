@@ -106,7 +106,6 @@ export class MovieService {
 
   reserveSeats(data: boolean[][]) {
     let sth = Array();
-    console.log(data);
     
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < data[i].length; j++) {
@@ -117,7 +116,6 @@ export class MovieService {
         });
       }
     }
-    console.log(sth);
     return this.http.put(`${baseUrl}/seats`, sth);
   }
 
