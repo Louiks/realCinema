@@ -216,40 +216,36 @@ app.route("/seats")
 // })
 
  .put(function(req, res){
-   array = [];
+   rowArray = [];
+   columnArray = []
    req.body.forEach(element => {
     console.log(element);
-    const obj = {
-      row: element.row,
-      column: element.column
-    };
-    array.push(obj);
-  });
-  console.log(array);
-  seatsArray = [];
-  array.forEach(element => {
-    Seat.find(
-      {$and:[
-          {"row":{"$in":[element.row]}},
-          {"column":{"$in":[element.column]}}
-      ]}, (err, seats) => {
-        if (err) {
-            res.json({
-                success: false,
-                message: "An error occured while fetching seats",
-            })
-        } else {
-            seatsArray.push(seats);
-            res.json({
-                success: true,
-                message: "Seats fetched",
-                seats: seats
-            })
-        }
-    })
+    rowArray.push(element.row);
+    });
+    req.body.forEach(element => {
+      console.log(element);
+      columnArray.push(element.column);
+      });
+
+  Seat.updateMany({$and: [
+    {row : {$in : rowArray}},
+    {column : {$in : columnArray}},
+    {isReserved : false}
+  ]}, { $set : {isReserved: true}},  (err, doc, ress) => {
+    if (err) {
+        res.json({
+            message: "error: " + err,
+            success: false,
+        })
+    } else {
+        res.json({
+            success: true,
+            message: doc, ress
+        });
+    }});        
  });
- console.log(seatsArray);
-  });
+
+
 
    
 
