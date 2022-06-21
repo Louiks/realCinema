@@ -9,7 +9,7 @@ import { NewHallService } from '../new-hall.service';
   styleUrls: ['./new-hall-overview.component.scss']
 })
 export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
-  seatRowsCopy: any;
+  seatRowsCopy?: boolean[][];
   numberArray: number[] | undefined;
   selectedRows: number | undefined;
   selectedSeats: number | undefined;
@@ -50,15 +50,17 @@ export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
     })
   }
 
-  getEquivalent(i: number, j: number): boolean {
-    return this.seatRowsCopy[i][j];
+  getEquivalent(i: number, j: number): boolean | undefined {
+    return this.seatRowsCopy?.[i][j];
   }
 
   switch(event: any): void {
     let buttonId = event.target.attributes.id;
     let nums = buttonId.value.toString().split("_");
     console.log(event);
-    this.seatRowsCopy[nums[1]][nums[2]] = !this.seatRowsCopy[nums[1]][nums[2]]
+    if (this.seatRowsCopy) {
+      this.seatRowsCopy[nums[1]][nums[2]] = !this.seatRowsCopy?.[nums[1]][nums[2]];
+    }
   }
 
   changeSelectedRowNo(event: any): void {
@@ -93,7 +95,7 @@ export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
 
   submitAddingNewHall() {
     this.isWaiting = true;
-    this.newHallService.addNewHall(this.seatRowsCopy).subscribe(response => {
+    this.seatRowsCopy && this.newHallService.addNewHall(this.seatRowsCopy).subscribe(response => {
       setTimeout(()=>{
         this.responseAvailable = true;
         if(response) {
