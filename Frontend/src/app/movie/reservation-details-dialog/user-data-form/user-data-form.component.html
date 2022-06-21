@@ -1,7 +1,7 @@
 <app-header></app-header>
 <!-- <app-navbar></app-navbar> -->
-<section [ngClass]="{'waiting' : isWaiting }">
-    <div class="centered-card" *ngIf="!hasBeenSumbitted" >
+<section [ngClass]="{'waiting' : shouldWait()}">
+    <div class="centered-card" *ngIf="!hasBeenSumbitted && !reservationFailed" >
         <h1>Temporary reservation set!</h1>
         <br>
         <div class="short-action-description">Your reservation will expire at: 
@@ -27,7 +27,7 @@
             </div>
         </form>
     </div>
-    <div class="centered-card" *ngIf="hasBeenSumbitted">
+    <div class="centered-card" *ngIf="hasBeenSumbitted && !reservationFailed">
         <div class="reservation-done-title">
             Reservation has been sumbitted!
         </div>
@@ -54,5 +54,12 @@
             </button>
         </div>
     </div>
+    <div class="failed-reservation centered-card" *ngIf="reservationFailed">
+        <div class="failed-reservation-header">
+            Reservation failed, one of the selected seats has already been taken!
+        </div>
+        <div class="failed-reservation-content">Taking you back to reservations...</div>
+    </div>
+    
 </section>
 <app-footer></app-footer>

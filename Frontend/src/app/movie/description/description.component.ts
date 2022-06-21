@@ -55,17 +55,18 @@ export class DescriptionComponent implements OnInit {
     }
   }
   tada(time: string): void {
-    console.log('tada()', time);
-    this.open(SeatSelectionComponent);
+    this.open(SeatSelectionComponent, time);
   }
+
   moreTimes(): void {
-    console.log('more :)');
+    console.log('not implemented yet');
     
   }
 
-  open(content: any) {
+  open(content: any, selectedTime: string) {
     this.openedModal = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg', centered: true, windowClass: 'popup-custom'});
     this.openedModal.componentInstance.modal = this.openedModal;
+    this.openedModal.componentInstance.time = selectedTime;
   }
   
   private getDismissReason(reason: any): string {

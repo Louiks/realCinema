@@ -13,7 +13,16 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   date = Date();
 
   @Input()
-  movie = '';
+  time = '';
+
+  @Input()
+  movie = {
+    title: 'Sonic the hedgehog 2',
+    date: '6/22/22, ',
+    hall: '1',
+    seats: '0',
+    price: '10.00 zl',
+  };
 
   @Input()
   public modal: any;
@@ -47,23 +56,33 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.movieObject =  this.movieService.getSeatsByMovieAndDate(this.movie, this.date);
-    this.seatRows = this.movieObject.seats;
-    this.disabledSeats = this.movieObject.seats;
-  
-    this.seatRowsCopy = JSON.parse(JSON.stringify(this.seatRows));
-    this.numberArray = Array(100).fill(0).map((x,i)=>i);
-
-    this.selectedRows = 5;
-    this.selectedSeats = 17;
-    this.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    this.resizeObservable$ = fromEvent(window, 'resize')
-    this.resizeSubscription$ = this.resizeObservable$.subscribe( (evt: any) => {
-      this.updateOverflow();
+    this.movieService.getSeatsByMovieAndDate().subscribe(response =>{
+      const anyResponse = (response as any)
+      const lastEL = anyResponse[anyResponse.length-1];
+      var arr = this.movieService.makeArray((lastEL.row as number), (lastEL.column as number), false);
+      anyResponse.forEach((element: { row: number; column: number; isReserved: boolean; }) => {
+        arr[(element.row as number)][(element.column as number)] = !element.isReserved;
+      });
+      this.movieObject = { seats: arr, singleSeatPrice: 19.5 };
+      this.seatRows = this.movieObject.seats;
+      this.disabledSeats = this.movieObject.seats;
+    
+      this.seatRowsCopy = JSON.parse(JSON.stringify(this.seatRows));
+      this.numberArray = Array(100).fill(0).map((x,i)=>i);
+      this.selectedRows = 5;
+      this.selectedSeats = 17;
+      this.resizeObservable$ = fromEvent(window, 'resize')
+      this.resizeSubscription$ = this.resizeObservable$.subscribe( (evt: any) => {
+        this.updateOverflow();
+      });
+      this.formattedPrice = `Total: ` + this.price + `zł`;
+      this.formattedSeatPrice = `Price for a single seat: ` + this.movieObject.singleSeatPrice + 'zł';
+      this.formattedSelectedCount = `Selected seats: ` + this.selected;
+      setTimeout(()=>{
+        this.updateOverflow();
+      });
     });
-    this.formattedPrice = `Total: ` + this.price + `zł`;
-    this.formattedSeatPrice = `Price for a single seat: ` + this.movieObject.singleSeatPrice + 'zł';
-    this.formattedSelectedCount = `Selected seats: ` + this.selected;
+    this.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   }
   
   switch(event: any): void {
@@ -95,24 +114,35 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   isReserveButtonDisabled(): boolean {
     return this.selected === 0 || this.isWaiting;
   }
-
-  submit(): void {
+  
+  submit() {
+    this.movie = {...this.movie, date: this.movie.date + this.time, seats: this.selected.toString(), price: this.price + `zł`}
     this.isWaiting = true;
     setTimeout(() => {
-      this.modal.close();
-      this.router.navigate([`../reservation-form`]);//TODO Outcomment
-    }, 3000);
-    // this.movieService.reserveSeats(this.seatRowsCopy).subscribe((response)=>{
-    //   console.log(response);
-    //   if (true) {
-    //     //if response ok
-    //     this.router.navigate([`../reservation-form`]);
-    //   }
-    //   /*
-    //   tutaj jako response mozna dostac
-    //   - ok, wtedy zamyka się popup, przechodzimy do podania danych i rezerwacja jest tymczasowa, np. mamy 10 minut na podanie swoich danych
-    //   - nie ok, wtedy w response dostajemy informację o tych miejscach ktore zostaly juz zarezerwowane
-    //   */
-    // });
+      return this.movieService.reserveSeats(this.seatRowsCopy)
+        .subscribe(response=>{
+          if(response) {
+            this.modal.close();
+            this.router.navigate([`../reservation-form`, 
+            {
+              movie_title: this.movie.title,
+              movie_date: this.movie.date,
+              movie_price: this.movie.price,
+              movie_hall: this.movie.hall,
+              movie_seats: this.movie.seats,
+            }]);
+          }}
+        );
+    }, 1000);
+  }
+
+  getAplhabetLetter(index: number): string {
+    const rest = index % 25;
+    const main = Math.floor(index / 25) +1;
+    let finalString = '';
+    for(var i = 0; i < main; i++) {
+      finalString += this.alphabet?.[rest];
+    }
+    return finalString;
   }
 }
