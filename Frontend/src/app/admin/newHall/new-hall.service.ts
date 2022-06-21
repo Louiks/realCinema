@@ -17,10 +17,10 @@ export class NewHallService {
         seats.push({
           row: i,
           column: j,
-          isReseverd: !data[i][j],
+          isReseverd: !!data[i][j]
         });
       }
    }
-    return this.http.post(`${baseUrl}/seats`, seats, { responseType: 'text' });
+    return this.http.post(`${baseUrl}/seats`, seats, { responseType: 'text'});
   }
 }

@@ -10,10 +10,11 @@ const passport = require("passport");
 const User = database.user;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
+var bodyParser = require('body-parser')
+
 
 
 const ticketRoute = require('./routes/ticketRoute');
-const seatsRoute = require('./routes/seatRoute');
 const reservationRoute = require('./routes/reservationRoute');
 
 var corsOptions = {
@@ -37,7 +38,11 @@ app.use('/ticket', ticketRoute);
 app.use('/reservation', reservationRoute);
 app.use(passport.initialize());
 app.use(passport.session());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
 
+// parse application/json
+app.use(bodyParser.json())
 
 // sso
 passport.use(User.createStrategy());
@@ -130,13 +135,13 @@ const SeatSchema = database.mongoose.Schema({
    },
    isReserved: {
        type: Boolean,
-       default: false
+       required: true
    },
 });
 
 const Seat = database.mongoose.model("Seat", SeatSchema);
 
-
+Seat.deleteMany({});
 app.route("/seats")
 // pobieramy wszystkie miejsca
  .get(function(req, res){
@@ -153,14 +158,15 @@ app.route("/seats")
  })
 
  .post(function(req, res){
-  console.log(req.body);
+  
   array = [];
   req.body.forEach(element => {
-    console.log(element);
+    console.log(element.isReserved);
+    var isReserved = Math.random() < 0.5;
     const newSeat = Seat({
       row: element.row,
       column: element.column,
-      isReserved: element.isreserved
+      isReserved: isReserved
     });
     array.push(newSeat);
   });
@@ -216,8 +222,10 @@ app.route("/seats")
 // })
 
  .put(function(req, res){
+  console.log(req.body);
    rowArray = [];
-   columnArray = []
+   columnArray = [];
+   updateSeats = [];
    req.body.forEach(element => {
     console.log(element);
     rowArray.push(element.row);
@@ -225,14 +233,14 @@ app.route("/seats")
     req.body.forEach(element => {
       console.log(element);
       columnArray.push(element.column);
-      });
+      }); 
 
   Seat.updateMany({$and: [
     {row : {$in : rowArray}},
     {column : {$in : columnArray}},
     {isReserved : false}
   ]}, { $set : {isReserved: true}},  (err, doc, ress) => {
-    if (err) {
+    if (err) { 
         res.json({
             message: "error: " + err,
             success: false,
