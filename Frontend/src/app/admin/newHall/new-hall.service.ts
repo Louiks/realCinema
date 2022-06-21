@@ -14,14 +14,14 @@ export class NewHallService {
     const seats = Array<Seat>();
     for(let i = 0; i < data.length; i++) {
       for(let j = 0; j < data[i].length; j++) {
-        seats.push({
-          row: i,
-          column: j,
-          isReseverd: !!data[i][j]
-        });
+        const newSeat = new Seat();
+        newSeat.row = i.toString();
+        newSeat.column = j.toString();
+        newSeat.isReserved = !data[i][j];
+        seats.push(newSeat);
       }
    }
-    return this.http.post(`${baseUrl}/seats`, seats, { responseType: 'text'});
+    return this.http.post(`${baseUrl}/seats`, seats, { responseType: 'text', headers: {'Content-type': 'application/json'}});
   }
 }
 
