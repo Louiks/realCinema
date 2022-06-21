@@ -86,3 +86,24 @@ label {
     font-size: 2rem;
     margin-bottom: 2rem;
 }
+
+.failed-reservation {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.failed-reservation-header {
+    font-size: x-large;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+.failed-reservation-content {
+    margin-top: 3rem;
+    font-size: large;
+    font-weight: lighter;
+    display: flex;
+    justify-content: center;
+}

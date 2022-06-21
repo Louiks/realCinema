@@ -1,5 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { fromEvent, Observable, reduce, Subscription } from 'rxjs';
+import { NewHallService } from '../new-hall.service';
 
 @Component({
   selector: 'app-new-hall-overview',
@@ -14,11 +16,14 @@ export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
   seatRows: boolean[][] | undefined;
   isOverflown = false;
   alphabet: string | undefined;
-  resizeObservable$: Observable<Event> | undefined
-  resizeSubscription$: Subscription | undefined
-  
+  resizeObservable$: Observable<Event> | undefined;
+  resizeSubscription$: Subscription | undefined;
+  isWaiting = false;
+  responseAvailable = false;
+  response = '';
 
-  constructor() { }
+  constructor(private newHallService: NewHallService,  protected readonly router: Router) { }
+
   ngAfterViewChecked(): void {
     this.updateOverflow();
   }
@@ -67,15 +72,13 @@ export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
   }  
 
   generateHall(): void {
-    this.seatRows = Array(this.selectedRows).fill([true]).map((x,i)=>Array(this.selectedSeats).fill(true))
-    //this.seatRowsCopy = JSON.parse(JSON.stringify(this.seatRows));
+    this.seatRows = Array(this.selectedRows).fill([true]).map((x,i)=>Array(this.selectedSeats).fill(true));
     this.seatRowsCopy = JSON.parse(JSON.stringify(this.seatRows));
   }
 
   updateOverflow(): void {
     const element = document.getElementById('overflow');
     this.isOverflown = element? element.offsetWidth != element.scrollWidth : false;
-    console.log(this.isOverflown);
   }
 
   getAplhabetLetter(index: number): string {
@@ -86,5 +89,21 @@ export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
       finalString += this.alphabet?.[rest];
     }
     return finalString;
+  }
+
+  submitAddingNewHall() {
+    this.isWaiting = true;
+    this.newHallService.addNewHall(this.seatRowsCopy).subscribe(response => {
+      setTimeout(()=>{
+        this.responseAvailable = true;
+        if(response) {
+          this.response = response;
+        }
+      },2000);
+      setTimeout(()=>{
+        this.isWaiting = false;
+        this.router.navigate([`../dashboard`]);
+      },4200);
+    });
   }
 }

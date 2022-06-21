@@ -47,6 +47,9 @@ export class HeaderComponent implements OnInit {
   getUsername(): string {
     return this.authenticationService.getUsername();
   }
+  goToNewHall(): void {
+    this.router.navigate([`../newhall`]);
+  }
 
   logOut(): void {
     this.authenticationService.logout();

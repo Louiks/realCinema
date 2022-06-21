@@ -1,16 +1,16 @@
 <app-header></app-header>
-<div class="body">
+<div class="body" [ngClass]="{'waiting' : isWaiting }">
     <div class="spacer">
 
     </div>
     <div class="central-page">
         
-        <div class="outer-space row">
-            <div class="col-16">
+        <div class="outer-space row" *ngIf="!responseAvailable">
+            <div class="col-16 flex-container">
                 <div>
                     Rows:
-                    <div ngbDropdown class="d-inline-block">
-                        <button type="button" class="dropdown btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>{{selectedRows}}</button>
+                    <div ngbDropdown class="d-inline-block" >
+                        <button type="button" class="dropdown btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle [ngClass]="{'waiting' : isWaiting }">{{selectedRows}}</button>
                         <div ngbDropdownMenu class="short-list" aria-labelledby="dropdownBasic1">
                             <button ngbDropdownItem class="dropdown-item" *ngFor="let num of numberArray" (click)="changeSelectedRowNo(num)">{{num}}</button>
                         </div>
@@ -19,7 +19,7 @@
                 <div>
                     Seats in a row:
                     <div ngbDropdown class="d-inline-block">
-                        <button type="button" class="dropdown btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>{{selectedSeats}}</button>
+                        <button type="button" class="dropdown btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle [ngClass]="{'waiting' : isWaiting }">{{selectedSeats}}</button>
                         <div ngbDropdownMenu class="short-list" aria-labelledby="dropdownBasic1">
                             <button ngbDropdownItem class="dropdown-item" *ngFor="let num of numberArray" (click)="changeSelectedSeatNo(num)">{{num}}</button>
                         </div>
@@ -40,10 +40,18 @@
                     <div *ngFor="let seatRow of seatRows;let i=index;" class="seat-row" id="overflow" [ngClass]="isOverflown? 'with-overflow' : 'without-overflow'">
                         <!-- <div *ngIf="selectedSeats? selectedSeats < 20: false" class="row-letter">{{getAplhabetLetter(i)}}</div> -->
                         <div *ngFor="let seat of seatRow;let j=index;"(click)="switch($event)">
-                            <button [ngClass]=" getEquivalent(i, j)? 'btn-primary' : 'btn-secondary'"  class="btn seat" id="seat_{{i}}_{{j}}"></button>
+                            <button [ngClass]=" {'waiting' : isWaiting, 'btn-primary' : getEquivalent(i, j), 'btn-secondary' : !getEquivalent(i, j)}"  class="btn seat" id="seat_{{i}}_{{j}}"></button>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-8"></div>
+            <button (click)="submitAddingNewHall()" class="submit__btn col-2" [ngClass]="{'waiting' : isWaiting }">submit</button>
+        </div>
+        <div class="response" *ngIf="responseAvailable">
+            {{response}}
+            <div>
+                Redirecting...
             </div>
         </div>
     </div>

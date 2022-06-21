@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const baseUrl = 'http://localhost:4200/movie';
+const baseUrl = 'http://localhost:3000';
 
 @Injectable({
   providedIn: 'root'
@@ -86,20 +86,38 @@ export class MovieService {
     return  retunValue;
   }
 
-  getSeatsByMovieAndDate(movie: string, date: string) {
-    return {
-      seats: [
-        [true,false,false,true,false,true,false,true,false,true,true,true,false,true,true,true,false],
-        [true,false,true,false,false,true,false,true,false,true,false,true,false,true,false,true,false], 
-        [true,true,false,false,false,true,false,true,false,true,true,true,false,true,true,true,false],
-        [true,false,true,false,false,true,false,true,false,true,false,true,false,true,false,true,false],
-        [true,false,false,true,false,true,true,true,false,true,true,true,false,true,false,true,false]],
-      singleSeatPrice: 19.5,
-    };
+  getSeatsByMovieAndDate() {
+    return this.http.get(`${baseUrl}/seats`);
   }
+  makeArray(row: number, column: number, value: boolean) {
+    var arr = ([] as unknown as [boolean[]]);
+    row++;
+    column++;
+    for(let i = 0; i < row; i++) {
+        arr[i] = ([] as boolean[]);
+        for(let j = 0; j < column; j++) {
+            arr[i][j] = value;
+        }
+    }
+    return arr;
+  }
+   
+  
 
   reserveSeats(data: any) {
-    return this.http.put(`${baseUrl}/reserve_seats`, data);
+    let sth = Array();
+    console.log(data);
+    
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < data[i].length; j++) {
+        sth.push({
+          row: i,
+          column: j
+        });
+      }
+    }
+    console.log(sth);
+    return this.http.put(`${baseUrl}/seats`, sth);
   }
 
   submitUserData(data: any) {

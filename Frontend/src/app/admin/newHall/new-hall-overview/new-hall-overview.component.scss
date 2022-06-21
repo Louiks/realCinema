@@ -1,3 +1,4 @@
+@import "src/app/shared/style.scss";
 .body {
     background-image: linear-gradient(rgb(39, 39, 39), black);
     min-height: 1200px;
@@ -150,4 +151,43 @@ span.buttonText {
     background-image: -webkit-gradient(linear, left bottom, left top, from(#3d3d3d), to(#b490ca));
     background-image: -webkit-linear-gradient(bottom, #636363 0%, #616161 100%);
     background-image: linear-gradient(to top, #464646 0%, #adadad 100%);
+}
+
+.waiting {
+    cursor: wait;
+}
+.response {
+    text-align: center;
+    min-height: 60%;
+    min-width: 60%;
+    font-size: xx-large;
+}
+
+.submit__btn {
+    margin-top: 1.5rem;
+    color: white;
+    background: none;
+    padding: 0.5rem;
+    border-radius: 3px ;
+    border: 1px solid white;
+}
+.submit__btn:hover {
+    background-color: rgb(58, 58, 58);
+    @include rc-common-text;
+}
+.submit__btn:active {
+    transform: translateY(4px);
+}
+.submit__btn:disabled {
+    background: #dddddd;
+    color: gray;
+}
+.submit__btn:disabled:hover {
+    color: grey;
+    text-shadow: none;
+}
+.flex-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1.75rem;
 }

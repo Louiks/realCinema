@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MovieService } from '../../movie.service';
 import { Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/shared/Authentication/authentication.service';
 
 @Component({
@@ -16,17 +16,16 @@ export class UserDataFormComponent implements OnInit {
   @Input()
   expirationTime?: Date = new Date();
   
-  @Input()
+  constructor(private movieService: MovieService, protected readonly router: Router, private authenticationService: AuthenticationService, private route: ActivatedRoute) { }
+ 
   movie = {
-    title: 'Sonic the hedgehog 2',
-    date: '01/10/2022',
-    hall: '4',
-    seats: '12 / a',
-    price: '10.00 zl',
-  };
-  
-  constructor(private movieService: MovieService, protected readonly router: Router, private authenticationService: AuthenticationService) { }
-
+    title: '',
+    date: '',
+    price: '',
+    hall: '',
+    seats: '',
+  }
+  reservationFailed = false;
   pipe = new DatePipe('en-US');
   formattedExpirationDate: any;
   hasBeenSumbitted = false;
@@ -59,14 +58,27 @@ export class UserDataFormComponent implements OnInit {
         lastName: currentUser.lastName
       })
     }
+    this.movie = {
+      title: this.route.snapshot.paramMap.get('movie_title') ?? '',
+      date: this.route.snapshot.paramMap.get('movie_date') ?? '',
+      price: this.route.snapshot.paramMap.get('movie_price') ?? '',
+      hall: this.route.snapshot.paramMap.get('movie_hall') ?? '',
+      seats: this.route.snapshot.paramMap.get('movie_seats') ?? '',
+    }
+    console.log(this.route.snapshot.paramMap.get('movie_title'));
+    console.log(this.route.snapshot.paramMap.get('movie_date'));
+    console.log(this.route.snapshot.paramMap.get('movie_price'));
+    console.log(this.route.snapshot.paramMap.get('movie_hall'));
+    console.log(this.route.snapshot.paramMap.get('movie_seats'));
   }
 
   submit() {
+    //todo use goBackToMovie() if response not ok
     this.isWaiting = true;
     setTimeout(()=> {
       this.hasBeenSumbitted = true;
       this.isWaiting = false;
-    }, 3000)
+    }, 3000);
     const userData = {
       firstName: this.reservationDataForm.get('firstName')?.value,
       lastName: this.reservationDataForm.get('lastName')?.value,
@@ -84,5 +96,13 @@ export class UserDataFormComponent implements OnInit {
 
   goToDashboard(): void {
     this.router.navigate([`../dashboard`]);
+  }
+
+  goBackToMovie(): void {
+    this.router.navigate([`../movie`]);
+  }
+
+  shouldWait(): boolean {
+    return this.isWaiting || this.reservationFailed;
   }
 }
