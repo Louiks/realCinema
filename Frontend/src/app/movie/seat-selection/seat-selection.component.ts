@@ -67,7 +67,15 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
       this.seatRows = this.movieObject.seats;
       this.disabledSeats = this.movieObject.seats;
     
-      this.seatRowsCopy = JSON.parse(JSON.stringify(this.seatRows));
+      if ( this.seatRows?.length && this.seatRows?.[0].length) {
+        this.seatRowsCopy = [];
+        for(var i: number = 0; i < this.seatRows?.length; i++) {
+          this.seatRowsCopy[i] = [];
+          for(var j: number = 0; j< this.seatRows?.[0].length; j++) {
+            this.seatRowsCopy[i][j] = true;
+          }
+        }
+      }
       this.numberArray = Array(100).fill(0).map((x,i)=>i);
       this.selectedRows = 5;
       this.selectedSeats = 17;
@@ -88,7 +96,6 @@ export class SeatSelectionComponent implements OnInit, AfterViewInit {
   switch(event: any): void {
     let buttonId = event.target.attributes.id;
     if (buttonId){
-
       let nums = buttonId.value.toString().split("_");
       this.seatRowsCopy[nums[1]][nums[2]]? this.selected++ : this.selected--;
       this.price = this.selected * 19.50;

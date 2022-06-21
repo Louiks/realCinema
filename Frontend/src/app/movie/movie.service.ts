@@ -104,13 +104,14 @@ export class MovieService {
    
   
 
-  reserveSeats(data: any) {
+  reserveSeats(data: boolean[][]) {
     let sth = Array();
     console.log(data);
     
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < data[i].length; j++) {
-        sth.push({
+        let shouldReserve = !data[i][j];
+         shouldReserve && sth.push({
           row: i,
           column: j
         });

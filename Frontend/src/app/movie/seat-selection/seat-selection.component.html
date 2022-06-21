@@ -34,7 +34,8 @@
             <div *ngFor="let seatRow of seatRows;let i=index;" class="seat-row" id="overflow" [ngClass]="isOverflown? 'with-overflow' : 'without-overflow'">
                 <!-- <div *ngIf="selectedSeats? selectedSeats < 20: false" class="row-letter">{{getAplhabetLetter(i)}}</div> -->
                 <div *ngFor="let seat of seatRow;let j=index;"(click)="switch($event)">
-                    <button [ngClass]=" {'waiting' : isWaiting, 'btn-primary' : getEquivalent(i, j), 'btn-secondary' : !getEquivalent(i, j)}"  class="btn seat" id="seat_{{i}}_{{j}}"></button>
+                    <button *ngIf="!isDisabled(i,j)" [ngClass]=" {'waiting' : isWaiting, 'btn-primary' : getEquivalent(i, j), 'btn-secondary' : !getEquivalent(i, j)}"  class="btn seat" id="seat_{{i}}_{{j}}"></button>
+                    <button *ngIf="isDisabled(i,j)" class="btn seat" id="seat_{{i}}_{{j}}" [disabled]="isDisabled(i,j)"></button>
                 </div>
             </div>
         </div>
