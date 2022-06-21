@@ -158,18 +158,11 @@ app.route("/seats")
  })
 
  .post(function(req, res){
-  
   array = [];
   req.body.forEach(element => {
-    console.log(element.isReserved);
-    var isReserved = Math.random() < 0.5;
-    const newSeat = Seat({
-      row: element.row,
-      column: element.column,
-      isReserved: isReserved
-    });
-    array.push(newSeat);
-  });
+     const newSeat = {...element};
+   array.push(newSeat);
+ });
   Seat.insertMany(array, function(err){
     if(!err){
        res.send("Successfully added a new seat");
