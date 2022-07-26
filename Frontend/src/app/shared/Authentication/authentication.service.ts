@@ -76,12 +76,15 @@ export class AuthenticationService {
                 //     console.log('test ',user);
                 //     this.updateAccountInfo(user);
                 // });
+                const userNames = res.account.name?.split(' ');
+                const firstName = userNames ? userNames[0] : '';
+                const lastName = userNames ? userNames[1] : '';
                 this.updateAccountInfo(
                     {
-                        email: res.account.name,
-                        username: res.account.username,
-                        firstName: 'firstName_not_set',
-                        lastName: 'lastName_not_set',
+                        email: res.account.username,
+                        username: res.account.name,
+                        firstName: firstName,
+                        lastName: lastName,
                     }
                 );
                 this.msalService.instance.setActiveAccount(res.account);

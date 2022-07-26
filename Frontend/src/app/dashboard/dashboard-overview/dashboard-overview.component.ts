@@ -10,7 +10,7 @@ export class DashboardOverviewComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  beforeText = "WHAT'S ON AT"
   imageSize = {width: 350, height: 200, space: 10};
 
   imgCollection: Array<object> = [

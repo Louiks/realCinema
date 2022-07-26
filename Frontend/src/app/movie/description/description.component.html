@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-3 left-panel row">
+        <div class="col-15 image-container">
+            <img src="../../../assets/7.jpg" alt="image">
+        </div>
+        <div>
+            <h3>Premiere</h3>
+            <div>{{formattedDate}}</div>
+            <h3>Duration</h3>
+            <div>{{movieDetails.duration}}</div>
+            <h3>Production</h3>
+            <div>{{movieDetails.prodution}}</div>
+            <h3>Director</h3>
+            <div>{{movieDetails.director}}</div>
+            <h3>Cast</h3>
+            <div *ngFor="let actor of movieDetails.cast">
+                <div>{{actor}}</div>
+            </div>
+        </div>
+    </div>
+    <div class=" col-8 right-panel">
+        <div class="title">
+            {{movieDetails.title}}
+        </div>
+        <div class="categories">
+            <div *ngFor="let category of categoriesWithPipes; let i = index" class="category__item">
+                <div>{{category}}</div>
+            </div>
+        </div>
+        <div class="description">
+            {{movieDetails.description}}
+        </div>
+        <div class="dropdown">
+            <div ngbDropdown class="d-inline-block">
+                <button type="button" class="dropdown__btn" id="dropdownBasic1" ngbDropdownToggle>{{selectedCinema}}</button>
+                <div ngbDropdownMenu class="dropdown-list" aria-labelledby="dropdownBasic1">
+                    <button ngbDropdownItem class="dropdown-item" *ngFor="let cinema of movieDetails.cinemas" (click)="changeSelectedRowNo(cinema)">{{cinema}}</button>
+                </div>
+            </div>
+            <!-- <button class="dropdown__ok" (click)="checkRepertoire()">{{okText}}</button> -->
+        </div>
+        <div class="row">
+            <div *ngIf="times && times.length > 0" class="hours">
+                <div *ngFor="let time of formattedTimes"> 
+                    <app-time-card [time]="time" (click)="tada(time)"></app-time-card>
+                </div>
+                <app-time-card [other]= "moreInfo" (click)="moreTimes()"></app-time-card>
+            </div>
+            <div *ngIf="!times || times.length === 0" class="hours">
+                This movie is not being played today. <a href="#">Check other dates</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+version: '3'
+services:
+  real-cinema-db:
+    image: mongo:4.2.2
+    environment:
+      MONGO_INITDB_DATABASE: realCinema22
+    ports:
+      - 27017:27017
+  real-cinema-frontend:
+    image: real-cinema-frontend:latest
+    environment:
+      PORT: 3000
+      PROXY_API: http://localhost:8080/
+    ports:
+      - 3000:3000
+  real-cinema-backend:
+    image: real-cinema-backend:latest
+    environment:
+      MONGODB_URI: mongodb://localhost:27017/realCinema22
+    ports:
+      - 8080:8080

@@ -1,0 +1,46 @@
+
+<div class="content" [ngClass]="{'waiting' : isWaiting }">
+    <div class="title">
+        {{title}}
+    </div>
+    <div class="formatted-information">
+        {{formattedSeatPrice}}<br>
+        {{formattedSelectedCount}}<br>
+        {{formattedPrice}}
+    </div>
+    <!-- <div class="block col-11  scrollbar scrollbar-near-moon" >
+        <div  [ngClass]="isOverflown? 'letter-row-with-overflow' : 'letter-row-without-overflow'">
+            <div *ngFor="let seatRow of seatRows?.[0];let i=index;" class="col-letter">{{i}}</div>
+        </div>
+        <div *ngFor="let seatRow of seatRows;let i=index;" class="seat-row" id="overflow" [ngClass]="isOverflown? 'with-overflow' : 'without-overflow'">
+            <div *ngIf="selectedSeats? selectedSeats < 20: false" class="row-letter">{{getAplhabetLetter(i)}}</div>
+            <div *ngFor="let seat of seatRow;let j=index;"(click)="switch($event)">
+                <button *ngIf="!isDisabled(i,j)" [ngClass]="{'btn-primary' : getEquivalent(i, j), 'btn-secondary' : !getEquivalent(i, j), 'waiting' : isWaiting }"  class="btn seat" id="seat_{{i}}_{{j}}" [disabled]="isDisabled(i,j)"></button>
+                <button *ngIf="isDisabled(i,j)" class="btn seat" id="seat_{{i}}_{{j}}" [disabled]="isDisabled(i,j)" [ngClass]="{'waiting' : isWaiting }"></button>
+            </div>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-1 no-padding"> 
+            <!-- *ngIf="selectedSeats? selectedSeats >= 20: true" -->
+            <div *ngFor="let seatRow of seatRows;let i=index;">
+                <div class="row-letter">{{getAplhabetLetter(i)}}</div>
+            </div>
+        </div>
+        <div class="block col-11  scrollbar scrollbar-near-moon" >
+            <div  [ngClass]="isOverflown? 'letter-row-with-overflow' : 'letter-row-without-overflow'">
+                <div *ngFor="let seatRow of seatRows?.[0];let i=index;" class="col-letter">{{i}}</div>
+            </div>
+            <div *ngFor="let seatRow of seatRows;let i=index;" class="seat-row" id="overflow" [ngClass]="isOverflown? 'with-overflow' : 'without-overflow'">
+                <!-- <div *ngIf="selectedSeats? selectedSeats < 20: false" class="row-letter">{{getAplhabetLetter(i)}}</div> -->
+                <div *ngFor="let seat of seatRow;let j=index;"(click)="switch($event)">
+                    <button *ngIf="!isDisabled(i,j)" [ngClass]=" {'waiting' : isWaiting, 'btn-primary' : getEquivalent(i, j), 'btn-secondary' : !getEquivalent(i, j)}"  class="btn seat" id="seat_{{i}}_{{j}}"></button>
+                    <button *ngIf="isDisabled(i,j)" class="btn seat" id="seat_{{i}}_{{j}}" [disabled]="isDisabled(i,j)"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="button-container" >
+        <button class="reserve__btn" [ngClass]="{'waiting' : isWaiting }" (click)="submit()" [disabled]="isReserveButtonDisabled()">{{buttonContent}}</button>
+    </div>
+</div>

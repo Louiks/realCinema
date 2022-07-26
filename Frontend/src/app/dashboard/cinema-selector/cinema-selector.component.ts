@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-cinema-selector',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cinema-selector.component.scss']
 })
 export class CinemaSelectorComponent implements OnInit {
+
+  @Input()
+  beforeText = '';
 
   constructor() { }
 
