@@ -8,33 +8,34 @@ import { DashboardOverviewComponent } from './dashboard/dashboard-overview/dashb
 import { MovieDetailsComponent } from './movie/movie-details/movie-details.component';
 import { UserDataFormComponent } from './movie/reservation-details-dialog/user-data-form/user-data-form.component';
 
-
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: 'dashboard'},
-  {path: 'dashboard', component: DashboardOverviewComponent},
-  {path: 'login', component: LoginOverviewComponent},
-  {path: 'register', component: RegistrationOverviewComponent},
-  {path: 'reservation-form', component: UserDataFormComponent},
-  {path: 'admin',
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: 'dashboard', component: DashboardOverviewComponent },
+  { path: 'login', component: LoginOverviewComponent },
+  { path: 'register', component: RegistrationOverviewComponent },
+  { path: 'reservation-form', component: UserDataFormComponent },
+  {
+    path: 'admin',
     children: [
       {
-      path: 'newhall',
-      component: NewHallOverviewComponent
+        path: 'newhall',
+        component: NewHallOverviewComponent,
       },
     ],
-  component: AdminPanelComponent},
+    component: AdminPanelComponent,
+  },
   {
     path: 'newhall',
-    component: NewHallOverviewComponent
-    },
+    component: NewHallOverviewComponent,
+  },
   {
     path: 'movie',
-    component: MovieDetailsComponent
-    },
+    component: MovieDetailsComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

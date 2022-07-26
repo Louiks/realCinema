@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MovieService } from '../movie.service';
 import { SeatSelectionComponent } from '../seat-selection/seat-selection.component';
 
@@ -10,10 +10,9 @@ import { SeatSelectionComponent } from '../seat-selection/seat-selection.compone
   styleUrls: ['./description.component.scss'],
 })
 export class DescriptionComponent implements OnInit {
-
   @Input()
   movieDetails?: any;
-  
+
   categoriesWithPipes = [];
   selectedCinema = '';
   okText = 'Check';
@@ -24,12 +23,16 @@ export class DescriptionComponent implements OnInit {
   moreInfo = 'More...';
   private openedModal?: any;
 
-  constructor(private movieService: MovieService, private modalService: NgbModal) { }
+  constructor(
+    private movieService: MovieService,
+    private modalService: NgbModal
+  ) {}
 
-  
   ngOnInit(): void {
-    this.formattedDate = this.pipe.transform(this.movieDetails.premiere, 'dd/MM/yyyy');
-    //this.categoriesWithPipes = this.insertPipes(this.movieDetails.categories);
+    this.formattedDate = this.pipe.transform(
+      this.movieDetails.premiere,
+      'dd/MM/yyyy'
+    );
     this.categoriesWithPipes = this.movieDetails.categories;
     this.selectedCinema = this.movieDetails.cinemas[0];
     this.updateRepertoire(this.movieDetails.cinemas[0]);
@@ -47,35 +50,30 @@ export class DescriptionComponent implements OnInit {
   }
 
   formatTimes() {
-    if(this.times) {
-      for(let i= 0; i< this.times?.length; i++) {
+    if (this.times) {
+      for (let i = 0; i < this.times?.length; i++) {
         let newTime = this.pipe.transform(this.times[i], 'HH:mm');
         this.formattedTimes[i] = newTime ?? this.times[i];
       }
     }
   }
-  tada(time: string): void {
+
+  seatReservationToggled(time: string): void {
     this.open(SeatSelectionComponent, time);
   }
 
   moreTimes(): void {
-    console.log('not implemented yet');
-    
+    console.error('this will not be implemented any time soon');
   }
 
   open(content: any, selectedTime: string) {
-    this.openedModal = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg', centered: true, windowClass: 'popup-custom'});
+    this.openedModal = this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      size: 'lg',
+      centered: true,
+      windowClass: 'popup-custom',
+    });
     this.openedModal.componentInstance.modal = this.openedModal;
     this.openedModal.componentInstance.time = selectedTime;
-  }
-  
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 }

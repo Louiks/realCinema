@@ -45,7 +45,6 @@ export class NewHallOverviewComponent implements OnInit, AfterViewChecked{
 
     this.resizeObservable$ = fromEvent(window, 'resize')
     this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
-      console.log('event: ', evt)
       this.updateOverflow();
     })
   }

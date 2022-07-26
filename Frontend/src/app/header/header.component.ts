@@ -5,14 +5,13 @@ import { AuthenticationService } from '../shared/Authentication/authentication.s
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  
-  constructor(private authenticationService: AuthenticationService,
-    protected readonly router: Router) {
-    
-  }
+  constructor(
+    private authenticationService: AuthenticationService,
+    protected readonly router: Router
+  ) {}
 
   public loggedIn = false;
   public username: string = 'User';
@@ -21,8 +20,7 @@ export class HeaderComponent implements OnInit {
   displayButtons = true;
 
   keepLoggedInStatusUpdated(): void {
-    AuthenticationService.accountInfo.subscribe(accountInfo =>{
-      console.log(accountInfo);
+    AuthenticationService.accountInfo.subscribe((accountInfo) => {
       this.loggedIn = !!accountInfo;
     });
   }
@@ -39,7 +37,7 @@ export class HeaderComponent implements OnInit {
   goToRegistrationPage(): void {
     this.router.navigate([`../register`]);
   }
-  
+
   goToDashboard(): void {
     this.router.navigate([``]);
   }
